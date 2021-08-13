@@ -3,6 +3,8 @@
 pragma solidity 0.6.8;
 pragma experimental ABIEncoderV2;
 
+enum TimeExtension { none, extended, endedBuyItNow }
+
 /**
  * @title Interface for Auction Houses
  */
@@ -34,6 +36,9 @@ interface IAuctionHouse {
         // The address of the ERC-20 currency to run the auction with.
         // If set to 0x0, the auction will be run in ETH
         address auctionCurrency;
+        // buyItNowPrice == 0 is ignored
+        // otherwise if user bids buyItNowPrice when auction is running, user will instantly win and auction ends
+        uint256 buyItNowPrice;
     }
 
     event AuctionCreated(
@@ -45,7 +50,8 @@ interface IAuctionHouse {
         address tokenOwner,
         address curator,
         uint8 curatorFeePercentage,
-        address auctionCurrency
+        address auctionCurrency,
+        uint256 buyItNowPrice
     );
 
     event AuctionApprovalUpdated(
@@ -105,7 +111,8 @@ interface IAuctionHouse {
         uint256 reservePrice,
         address payable curator,
         uint8 curatorFeePercentages,
-        address auctionCurrency
+        address auctionCurrency,
+        uint256 buyItNowPrice
     ) external returns (uint256);
 
     function setAuctionApproval(uint256 auctionId, bool approved) external;
