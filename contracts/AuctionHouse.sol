@@ -339,6 +339,10 @@ contract AuctionHouse is IAuctionHouse, ReentrancyGuard {
         }
     }
 
+    function auctionFinished(uint256 auctionId) public view returns (bool) {
+        return block.timestamp >= idToAuction[auctionId].firstBidTime.add(idToAuction[auctionId].duration);
+    }
+
     /**
      * @notice End an auction, finalizing the bid on Zora if applicable and paying out the respective parties.
      * @dev If for some reason the auction cannot be finalized (invalid token recipient, for example),
